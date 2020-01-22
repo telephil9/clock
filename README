@@ -1,0 +1,18 @@
+9clock
+======
+A clock for plan9
+
+SYNOPSIS
+--------
+9clock [-s spacing] [-p pixelsize]
+
+DESCRIPTION
+-----------
+9clock displays a clock similar to tty-clock but in a plan9 display.
+Options are:
+	-s spacing between each character (defaults to 10)
+	-p size of individual pixels (defaults to 10)
+
+Each digit is described as a 3x5 grid. When displayed they are scaled to squares of _pixelsize_ size.
+The colon follows the same rule but is defined by a 1x5 grid.
+Characters are separated by _spacing_ pixels.
