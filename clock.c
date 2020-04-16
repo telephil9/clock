@@ -34,13 +34,14 @@ int pixelsize = 10;
 int spacing = 10;
 Image *bg;
 Image *fg;
+Point origin;
 
 void
 drawpixel(int x0, int y0, int x, int y)
 {
 	Point p[4], o;
 
-	o = addpt(Pt(x0, y0), screen->r.min);
+	o = addpt(Pt(x0, y0), origin);
 	p[0] = addpt(o, mulpt(Pt(x,   y),   pixelsize));
 	p[1] = addpt(o, mulpt(Pt(x+1, y),   pixelsize));
 	p[2] = addpt(o, mulpt(Pt(x+1, y+1), pixelsize));
@@ -95,8 +96,15 @@ showtime(void)
 void
 eresized(int new)
 {
+	int w, h;
+
 	if(new && getwindow(display, Refnone) < 0)
 		sysfatal("cannot reattach to window: %r");
+	w = (4*Dwidth+1)*pixelsize+6*spacing;
+	h = Dheight*pixelsize+2*spacing;
+	origin = screen->r.min;
+	origin.x += (Dx(screen->r)-w)/2;
+	origin.y += (Dy(screen->r)-h)/2;
 	showtime();
 }
 
@@ -125,8 +133,8 @@ main(int argc, char** argv)
 	} ARGEND
 	if(initdraw(nil, nil, "clock") < 0)
 		sysfatal("initdraw: %r");
-	bg = allocimage(display, Rect(0, 0, 1, 1), screen->chan, 1, DWhite);
 	fg = allocimage(display, Rect(0, 0, 1, 1), screen->chan, 1, 0x55AAAAFF);
+	bg = allocimagemix(display, DPalebluegreen, DWhite);
 	einit(Emouse);
 	timer = etimer(0, 15*1000);
 	eresized(0);
